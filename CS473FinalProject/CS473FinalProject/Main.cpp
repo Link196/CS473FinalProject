@@ -15,41 +15,45 @@ using std::endl;
 
 int main()
 {
-	//int num_classes = 0; // variable to store the number of classes the student is taking
-	//cout << "How many buildings will be in your route? ";
-	//cin >> num_classes;
+	int num_classes = 0; // variable to store the number of classes the student is taking
+	cout << "How many buildings will be in your route? ";
+	cin >> num_classes;
 
-	//cout << "You entered " << num_classes << " building(s)." << endl; // for debugging
+	cout << "You entered " << num_classes << " building(s)." << endl; // for debugging
 
-	//cout << endl; // endline for formatting
+	cout << endl; // endline for formatting
 
 	// Building object creation
-	Building Johnston(1, "Johnston", 35);
+	Building Johnston(1, "Johnston", 24);
 	Building Robinson(2, "Robinson", 24);
 	Building Library(3, "Library", 24);
-	Building Hendricks(4, "Hendricks", 25);
-	Building HUB(5, "The HUB", 26);
-	Building Lindaman(6, "Lindaman", 26);
-	Building Weyerhaeuser(7, "Weyerhaeuser", 22);
-	Building Dixon(8, "Dixon", 23);
-	Building Cowles(9, "Cowles Auditorium", 23);
-	Building Music(10, "Music Building", 22);
-	Building Westminster(11, "Westminster", 22);
-	Building Art(12, "Art Building", 23);
-	Building Hawthorne(13, "Hawthorne", 22);
-	Building Stewart(14, "Stewart", 16); 
-	Building Arend(15, "Arend", 14);
-	Building BJ(16, "Baldwin-Jenkins", 14);
-	Building Oliver(17, "Oliver", 17);
-	Building Duvall(18, "Duvall", 14);
-	Building Boppell(19, "Boppell", 14);
-	Building Warren(20, "Warren", 14);
-	Building Mac(21, "McMillan", 14);
-	Building Ballard(22, "Ballard", 14);
+	Building Hendricks(4, "Hendricks", 24);
+	Building HUB(5, "The HUB", 24);
+	Building Lindaman(6, "Lindaman", 24);
+	Building Weyerhaeuser(7, "Weyerhaeuser", 24);
+	Building Dixon(8, "Dixon", 24);
+	Building Cowles(9, "Cowles Auditorium", 24);
+	Building Music(10, "Music Building", 24);
+	Building Westminster(11, "Westminster", 24);
+	Building Art(12, "Art Building", 24);
+	Building Hawthorne(13, "Hawthorne", 24);
+	Building Stewart(14, "Stewart", 13); 
+	Building Arend(15, "Arend", 13);
+	Building BJ(16, "Baldwin-Jenkins", 13);
+	Building Oliver(17, "Oliver", 13);
+	Building Duvall(18, "Duvall", 13);
+	Building Boppell(19, "Boppell", 13);
+	Building Warren(20, "Warren", 13);
+	Building Mac(21, "McMillan", 13);
+	Building Ballard(22, "Ballard", 13);
+	Building Facilities(23, "Facilities", 13);
 
-	double Graph[23][23]; // two-dimensional array to store the graph
-	int vertices = 23; // number of buildings
-	int edges = 23; //number of paths per building
+	// output the list of available buildings
+
+
+	double Graph[24][24]; // two-dimensional array to store the graph
+	int vertices = 24; // number of buildings
+	int edges = 24; // max number of paths per building
 
 	// initialize the graph
 	for (int i = 0; i < vertices; i++)
@@ -474,15 +478,38 @@ int main()
 	Graph[13][22] = 5.969; // Hawthorne to Ballard
 	Graph[22][13] = 5.969; // Ballard to Hawthorne
 
+	// To/From Facilities
+	Graph[23][1] = 1.496; // Facilities to Johnston
+	Graph[1][23] = 1.496; // Johnston to Facilities
+	Graph[23][2] = 1.200; // Facilities to Robinson
+	Graph[2][23] = 1.200; // Robinson to Facilities
+	Graph[23][3] = 2.174; // Facilities to the Library
+	Graph[3][23] = 2.174; // The Library to Facilities
+	Graph[23][4] = 2.018; // Facilities to Hendricks
+	Graph[4][23] = 2.018; // Hendricks to Facilities
+	Graph[23][5] = 3.003; // Facilities to the HUB
+	Graph[5][23] = 3.003; // The HUB to Facilities
+	Graph[23][6] = 2.153; // Facilities to Lindaman
+	Graph[6][23] = 2.153; // Lindaman to Facilities
+	Graph[23][7] = 1.948; // Facilities to Weyerhaeuser
+	Graph[7][23] = 1.948; // Weyerhaeuser to Facilities
+	Graph[23][8] = 2.696; // Facilities to Dixon
+	Graph[8][23] = 2.696; // Dixon to Facilities
+	Graph[23][9] = 3.005; // Facilities to Cowles Auditorium
+	Graph[9][23] = 3.005; // Cowles Auditorium to Facilities
+	Graph[23][10] = 3.660; // Facilities to the Music Building
+	Graph[10][23] = 3.660; // The Music Building to Facilities
+	Graph[23][11] = 1.540; // Facilities to Westminster
+	Graph[11][23] = 1.540; // Westminster to Facilities
+	Graph[23][12] = 0.901; // Facilities to the Art Building
+	Graph[12][23] = 0.901; // The Art Building to Facilities
+	Graph[23][13] = 4.634; // Facilities to Hawthorne
+	Graph[13][23] = 4.634; // Hawthorne to Facilities
+
 	// output the graph for debugging purposes
 	for (int i = 1; i < vertices; i++)
 		for (int j = 1; j < edges; j++)
-		{
-			if (Graph[i][j] != 0)
 				cout << "Graph[" << i << "][" << j << "] = " << Graph[i][j] << endl;
-			else
-				cout << "Graph[" << i << "][" << j << "] = N/A" << endl;
-		}
 
 	cout << endl; // endline for formatting
 	system("PAUSE"); // pauses the program so that the user can see any information on the screen before the probram exits
