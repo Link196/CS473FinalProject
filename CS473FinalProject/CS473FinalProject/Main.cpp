@@ -422,6 +422,10 @@ int main()
 	TravelingJanitor(Graph, f_path, visited, finw);
 
 	cout << "The fastest travel time from facilities to every other academic building is: " << finw << " minutes." << endl;
+	cout << "The route taken was: ";
+
+	for (int i = 0; i < 14; i++)
+		cout << f_path[i] << " ";
 
 	cout << endl; // endline for formatting
 	system("PAUSE"); // pauses the program so that the user can see any information on the screen before the probram exits
