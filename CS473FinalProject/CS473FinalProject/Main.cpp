@@ -12,152 +12,41 @@
 using std::cin;
 using std::cout;
 using std::endl;
+using namespace std;
 
-//double TravelingJanitor(double Graph[15][15], bool visited[15], int start, int vertices, int edges)
-//{
-//	double min = 0;
-//	visited[start] = true; // set the current building to visited
-//	double minimum = 1000; // initialize minumum distance variable to 1000
-//	double total = 0; // initialize variable for total travel time
-//	int temp1 = 0;
-//	int temp2 = 0;
-//
-//	for (int x = start; x < vertices; x++) {
-//		for (int i = 1; i <= vertices; i++)
-//		{
-//			if ((Graph[start][i] != 0) && (visited[i] == false))
-//				if (Graph[start][i] < minimum)
-//					minimum = Graph[start][i];
-//					temp1 = start;
-//					temp2 = i;
-//		}
-//		visited[temp2] = true;
-//		start =temp2;
-//		min = min + minimum;
-//		
-//	}
-//	return min;
-//}
+double cost = 0;
 
-void toFinal(int path[], int (&f_path)[15]) // copies local solution to the final solution
-{
-	for (int i = 0; i < 14; i++)
-		f_path[i] = path[i];
-	f_path[15] = path[0];
-}
+int least(int start, bool visit[15], double Graph[14][14]) {
+	int	num = 50;
+	int min = 50;
+	double costmin = 0;
 
-double firstMin(double graph[14][14], int i) // find the first minimum edge cost that ends at vertex i
-{
-	double min = INT_MAX;
-	for (int k = 0; k < 15; k++)
-		if (graph[i][k] < min && i != k)
-			min = graph[i][k];
-
-	return min;
-}
-
-double secondMin(double graph[14][14], int i) // find the second minimum edge cost that ends at vertex i
-{
-	double first = INT_MAX, second = INT_MAX;
-	for (int j = 0; j < 14; j++)
-	{
-		if (i == j)
-			continue;
-
-		if (graph[i][j] <= first)
-		{
-			second = first;
-			first = graph[i][j];
-		}
-
-		else if (graph[i][j] <= second && graph[i][j] != first)
-			second = graph[i][j];
-	}
-
-	return second;
-}
-
-void TravelingJanitorREC(double graph[14][14], double currb, double currw, int l, int path[], int (&f_path)[15], bool (&visited)[14], double &finw) 
-{
-	// base case: we gave covered all nodes
-	if (l == 14) 
-	{
-		// check for an edge from the previous vertex in the path back to the starting vertex
-		if (graph[path[l - 1]][path[0]] != 0) 
-		{
-			double result = currw + graph[path[l - 1]][path[0]]; // current weight is the total weight of the solution
-			
-			// if the found path is better than the best path, it is the new best path
-			if (result < finw) 
+	for (int i = 0; i < 14; i++) {
+		if ((Graph[start][i] != 0) && (visit[i] == 0))
+			if (Graph[start][i] + Graph[i][start] < min)
 			{
-				toFinal(path, f_path); // copy the path
-				finw = currw; // current weight is final weight
+				min = Graph[i][0] + Graph[start][i];
+				costmin = Graph[start][i];
+				num = i;
 			}
-		}
-
-		return; // exit the function if the final path is found
 	}
-
-	// if we haven't covered all nodes, iterate over all vertices to build the tree recursively
-	for (int i = 0; i < 14; i++) 
-	{
-		if (graph[path[l - 1]][i] != 0 && visited[i] == false)
-		{
-			double temp = currb;
-			currw += graph[path[l - 1]][i];
-
-			// different computation of currb for level 2 from other levels
-			if (l == 1)
-				currb -= ((firstMin(graph, path[l - 1]) + firstMin(graph, i)) / 2);
-
-			else
-				currb -= ((secondMin(graph, path[l - 1]) + firstMin(graph, i)) / 2);
-
-			// currb + currw is the lower bound for the node that we are at
-			// if the curent lower bound < finw, we need to do more at this node
-			if ((currb + currw) < finw)
-			{
-				path[l] = i;
-				visited[i] = true;
-
-				// recursively call TravelingJanitorREC for the next level
-				TravelingJanitorREC(graph, currb, currw, l + 1, path, f_path, visited, finw);
-			}
-
-			// if the current lower bound >= finw, we need to prune the node by reverting currw and currb
-			currw -= graph[path[l - 1]][i];
-			currb = temp;
-
-			// reset the visited array
-			for (int t = 0; t < 14; t++)
-				visited[t] = false;
-			for (int j = 0; j < l - 1; j++)
-				visited[path[j]] = true;
-		}
-	}
+	if (min != 50)
+		cost += costmin;
+	return num;
 }
+int mincost(int start, bool visit[15], double Graph[14][14]) {
+	int i;
+	int num = 0;
+	visit[start] = 1;
+	num += least(start, visit, Graph);
+	if (num == 50)
+	{
+		num = 0;
+		cost += Graph[start][num];
+		return 0;
+	}
+	mincost(num, visit, Graph);
 
-// this is the function that actually calculates finw
-void TravelingJanitor(double graph[14][14], int(&f_path)[15], bool(&visited)[14], double &finw)
-{
-	int path[15];
-	for (int t = 0; t < 15; t++)
-		path[t] = -1;
-
-	// calculate initial lower bound for the starting node using 1/2 * (sum of first min and second min for all edges)
-	// calculate the initial bound
-	double currb = 0;
-	for (int i = 0; i < 14; i++)
-		currb += (firstMin(graph, i) + secondMin(graph, i));
-
-	// source program rounds the lower bound to an integer here. will insert if needed
-
-	// starting vertex is vertex 0, so path[0] = 0
-	visited[0] = true;
-	path[0] = 0;
-
-	// call TravelingJanitorREC for currw for vertex 0 and level 1
-	TravelingJanitorREC(graph, currb, 0, 1, path, f_path, visited, finw);
 }
 
 int main()
@@ -196,27 +85,10 @@ int main()
 	Buildings[13] = Hawthorne;
 
 	double Graph[14][14]; // two-dimensional array to store the graph
-	bool visited[14]; // array to check whether a building has been visited
-	int vertices = 14; // number of buildings
-	int edges = 14; // max number of paths per building
-	int f_path[15]; // final path of the janitor
-	double finw = INT_MAX; // variable to store the amount of time that the janitor is in transit
+	bool visited[15]; // array to check whether a building has been visited
 
-	// initialize the graph
-	for (int i = 0; i < vertices; i++)
-		for (int j = 0; j < edges; j++)
-			Graph[i][j] = 0;
-
-	// initialize visited
-	for (int t = 0; t < 14; t++)
-		visited[t] = false;
-	
-	// initialize f_path
-	for (int t = 0; t < 15; t++)
-		f_path[t] = -1;
-
-	// add edges to the graph...manually
-	// To/From Johnston
+					  // add edges to the graph...manually
+					  // To/From Johnston
 	Graph[1][2] = 0.621; // Johnston to Robinson
 	Graph[2][1] = 0.621; // Robinson to Johnston
 	Graph[1][3] = 1.088; // Johnston to the Library
@@ -242,8 +114,8 @@ int main()
 	Graph[1][13] = 3.735; // Johnston to Hawthorne
 	Graph[13][1] = 3.735; // Hawthorne to Johnston
 
-	// To/From Robinson
-	
+						  // To/From Robinson
+
 	Graph[2][3] = 1.216; // Robinson to the Library
 	Graph[3][2] = 1.216; // The Library to Robinson
 	Graph[2][4] = 1.226; // Robinson to Hendricks
@@ -266,8 +138,8 @@ int main()
 	Graph[12][2] = 1.281; // The Art Building to Robinson
 	Graph[2][13] = 4.200; // Robinson to Hawthorne
 	Graph[13][2] = 4.200; // Hawthorne to Robinson
-	
-	// To/From the Library
+
+						  // To/From the Library
 	Graph[3][4] = 1.644; // The Library to Hendricks
 	Graph[4][3] = 1.644; // Hendricks to the Library
 	Graph[3][5] = 1.052; // The Library to the HUB
@@ -288,8 +160,8 @@ int main()
 	Graph[12][3] = 2.255; // The Art Building to the Library
 	Graph[3][13] = 3.683; // The Library to Hawthorne
 	Graph[13][3] = 3.683; // Hawthorne to the Library
-	
-	// To/From Hendricks
+
+						  // To/From Hendricks
 	Graph[4][5] = 1.130; // Hendricks to the HUB
 	Graph[5][4] = 1.130; // The HUB to Hendricks
 	Graph[4][6] = 1.748; // Hendricks to Lindaman
@@ -308,8 +180,8 @@ int main()
 	Graph[12][4] = 2.704; // The Art Building to Hendricks
 	Graph[4][13] = 2.943; // Hendricks to Hawthorne
 	Graph[13][4] = 2.943; // Hawthorne to Hendricks
-	
-	// To/From the HUB
+
+						  // To/From the HUB
 	Graph[5][6] = 1.953; // The HUB to Lindaman
 	Graph[6][5] = 1.953; // Lindaman to the HUB
 	Graph[5][7] = 2.481; // The HUB to Weyerhaeuser
@@ -326,8 +198,8 @@ int main()
 	Graph[12][5] = 2.927; // The Art Building to the HUB
 	Graph[5][13] = 2.597; // The HUB to Hawthorne
 	Graph[13][5] = 2.597; // Hawthorne to the HUB
-	
-	// To/From Lindaman
+
+						  // To/From Lindaman
 	Graph[6][7] = 0.553; // Lindaman to Weyerhaeuser
 	Graph[7][6] = 0.553; // Weyerhaeuser to Lindaman
 	Graph[5][8] = 1.548; // Lindaman to Dixon
@@ -342,8 +214,8 @@ int main()
 	Graph[12][6] = 1.919; // The Art Building to Lindaman
 	Graph[6][13] = 4.657; // Lindaman to Hawthorne
 	Graph[13][6] = 4.657; // Hawthorne to Lindaman
-	
-	// To/From Weyerhaeuser
+
+						  // To/From Weyerhaeuser
 	Graph[7][8] = 1.714; // Weyerhaeuser to Dixon
 	Graph[8][7] = 1.714; // Dixon to Weyerhaeuser
 	Graph[7][9] = 2.408; // Weyerhaeuser to Cowles Auditorium
@@ -356,8 +228,8 @@ int main()
 	Graph[12][7] = 0.844; // The Art Building to Weyerhaeuser
 	Graph[7][13] = 4.935; // Weyerhaeuser to Hawthorne
 	Graph[13][7] = 4.935; // Hawthorne to Weyerhaeuser
-	
-	// To/From Dixon
+
+						  // To/From Dixon
 	Graph[8][9] = 0.709; // Dixon to Cowles Auditorium
 	Graph[9][8] = 0.709; // Cowles Auditorium to Dixon
 	Graph[8][10] = 0.984; // Dixon to the Music Building
@@ -368,8 +240,8 @@ int main()
 	Graph[12][8] = 2.799; // The Art Building to Dixon
 	Graph[8][13] = 4.127; // Dixon to Hawthorne
 	Graph[13][8] = 4.127; // Hawthorne to Dixon
-	
-	// To/From Cowles Auditorium
+
+						  // To/From Cowles Auditorium
 	Graph[9][10] = 0.701; // Cowles Auditorium to the Music Building
 	Graph[10][9] = 0.701; // The Music Building to Cowles Auditorium
 	Graph[9][11] = 3.455; // Cowles Auditorium to Westminster
@@ -378,26 +250,26 @@ int main()
 	Graph[12][9] = 3.062; // The Art Building to Cowles Auditorium
 	Graph[9][13] = 3.831; // Cowles Auditorium to Hawthorne
 	Graph[13][9] = 3.831; // Hawthorne to Cowles Auditorium
-	
-	// To/From the Music Building
+
+						  // To/From the Music Building
 	Graph[10][11] = 4.296; // The Music Building to Westminster
 	Graph[11][10] = 4.296; // Westminster to the Music Building
 	Graph[10][12] = 3.712; // The Music Building to the Art Building
 	Graph[12][10] = 3.712; // The Art Building to the Music Building
 	Graph[10][13] = 4.462; // The Music Building to Hawthorne
 	Graph[13][10] = 4.462; // Hawthorne to the Music Building
-	
-	// To/From Westminster
+
+						   // To/From Westminster
 	Graph[11][12] = 0.771; // Westminster to the Art Building
 	Graph[12][11] = 0.771; // The Art Building to Westminster
 	Graph[11][13] = 5.745; // Westminster to Hawthorne
 	Graph[13][11] = 5.745; // Hawthorne to Westminster
 
-	// To/From the Art Building
+						   // To/From the Art Building
 	Graph[12][13] = 5.351; // The Art Building to Hawthorne
 	Graph[13][12] = 5.351; // Hawthorne to the Art Building
 
-	// To/From Facilities
+						   // To/From Facilities
 	Graph[0][1] = 1.496; // Facilities to Johnston
 	Graph[1][0] = 1.496; // Johnston to Facilities
 	Graph[0][2] = 1.200; // Facilities to Robinson
@@ -424,16 +296,34 @@ int main()
 	Graph[12][0] = 0.901; // The Art Building to Facilities
 	Graph[0][13] = 4.634; // Facilities to Hawthorne
 	Graph[13][0] = 4.634; // Hawthorne to Facilities
+						  // One of the billion attempts
+						  //double  dp[15][15];
+						  //double  ans;
+						  //int i, j, p, k;
+						  //int n = 13;
 
-	TravelingJanitor(Graph, f_path, visited, finw);
-
-	cout << "The fastest travel time from facilities to every other academic building is: " << finw << " minutes." << endl;
-	cout << "The route taken was: ";
-
-	for (int i = 0; i < 14; i++)
-		cout << f_path[i] << " ";
-
-	cout << endl; // endline for formatting
-	system("PAUSE"); // pauses the program so that the user can see any information on the screen before the probram exits
-	return 0;
+						  //	memset(dp, -1, sizeof(dp));
+						  //	// TSP solution here,bitmask and DP
+						  //	for (i = 1; i<(1 << n); i++) {// the current state
+						  //		for (j = 0; j<n; j++) {// during the current state,the last station is j
+						  //			
+						  //			for (k = 1; k<n; k++) {//the next state is k
+						  //				if ((i & (1 << k)) != 0) 
+						  //					continue;
+						  //				p = (i | (1 << k));// the new state(join k)
+						  //				if (dp[p][k] == -1) 
+						  //					dp[p][k] = dp[i][j] + Graph[j][k];
+						  //				dp[p][k] = min(dp[p][k], dp[i][j] + Graph[j][k]);
+						  //			}
+						  //		}
+						  //	}
+						  //	// get answer
+						  //	for (i = 1; i<n; i++) {
+						  //		if (dp[(1 << n) - 1][i]>0) ans = min(ans, dp[(1 << n) - 1][i] + Graph[i][0]);
+						  //	}
+						  //	printf("%d\n", ans);
+						  //}
+	mincost(0, visited, Graph);
+	cout << cost;
+	system("PAUSE");
 }
