@@ -7,50 +7,64 @@
 // Travelling Salesman Algorithm adapted from https://www.thecrazyprogrammer.com/2017/05/travelling-salesman-problem.html
 
 #include <iostream>
+#include<map>
+#include<algorithm>
 #include "Building.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
+using std::map;
+using std::min;
 using namespace std;
 
 double cost = 0;
+int path[15];
+int x = 0;
 
-int least(int start, bool visit[15], double Graph[14][14]) {
-	int	num = 50;
-	int min = 50;
+bool visit[14];
+
+int least(int start, double Graph[14][14]) {
+	int num = 50;
+	int min =50;
 	double costmin = 0;
 
 	for (int i = 0; i < 14; i++) {
-		if ((Graph[start][i] != 0) && (visit[i] == 0))
+		if ((Graph[start][i] != 0) && (visit[i] == false))
 			if (Graph[start][i] + Graph[i][start] < min)
 			{
 				min = Graph[i][0] + Graph[start][i];
 				costmin = Graph[start][i];
-				num = i;
+				num = i;	
+				
 			}
 	}
 	if (min != 50)
 		cost += costmin;
+	
 	return num;
 }
-int mincost(int start, bool visit[15], double Graph[14][14]) {
+int mincost(int start, double Graph[14][14]) {
 	int i;
 	int num = 0;
-	visit[start] = 1;
-	num += least(start, visit, Graph);
+	visit[start] = true;
+	path[x] = start;
+	x++;
+	num += least(start, Graph);
 	if (num == 50)
 	{
 		num = 0;
 		cost += Graph[start][num];
 		return 0;
 	}
-	mincost(num, visit, Graph);
+	mincost(num, Graph);
 
 }
 
 int main()
 {
+	for (int i = 0; i < 14; i++)
+		visit[i] = false;
 	// Building object creation
 	Building Facilities(0, "Facilities", 13);
 	Building Johnston(1, "Johnston", 13);
@@ -85,10 +99,13 @@ int main()
 	Buildings[13] = Hawthorne;
 
 	double Graph[14][14]; // two-dimensional array to store the graph
-	bool visited[15]; // array to check whether a building has been visited
+	//bool visited[15]; // array to check whether a building has been visited
 
-					  // add edges to the graph...manually
-					  // To/From Johnston
+	for (int i = 0; i < 14; i++)
+		Graph[i][i] = 0;
+	// add edges to the graph...manually
+	// To/From Johnston
+	
 	Graph[1][2] = 0.621; // Johnston to Robinson
 	Graph[2][1] = 0.621; // Robinson to Johnston
 	Graph[1][3] = 1.088; // Johnston to the Library
@@ -202,7 +219,7 @@ int main()
 						  // To/From Lindaman
 	Graph[6][7] = 0.553; // Lindaman to Weyerhaeuser
 	Graph[7][6] = 0.553; // Weyerhaeuser to Lindaman
-	Graph[5][8] = 1.548; // Lindaman to Dixon
+	Graph[6][8] = 1.548; // Lindaman to Dixon
 	Graph[8][6] = 1.548; // Dixon to Lindaman
 	Graph[6][9] = 1.847; // Lindaman to Cowles Auditorium
 	Graph[9][6] = 1.847; // Cowles Auditorium to Lindaman
@@ -296,7 +313,8 @@ int main()
 	Graph[12][0] = 0.901; // The Art Building to Facilities
 	Graph[0][13] = 4.634; // Facilities to Hawthorne
 	Graph[13][0] = 4.634; // Hawthorne to Facilities
-						  // One of the billion attempts
+	Graph[0][0] = 0;
+						  // One of the billion at
 						  //double  dp[15][15];
 						  //double  ans;
 						  //int i, j, p, k;
@@ -323,7 +341,10 @@ int main()
 						  //	}
 						  //	printf("%d\n", ans);
 						  //}
-	mincost(0, visited, Graph);
-	cout << cost;
+	mincost(0,Graph);
+	cout << cost << endl;
+	for (int i = 0; i < 15; i++)
+		cout << path[i] << " ";
+	cout << endl;
 	system("PAUSE");
 }
