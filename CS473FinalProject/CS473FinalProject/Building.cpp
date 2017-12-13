@@ -1,5 +1,12 @@
 #include "Building.h"
 
+Building::Building()
+{
+	ID = 0;
+	name = "Test";
+	num_connections = 0;
+}
+
 Building::Building(int id, string starting_name, int connections)
 {
 	ID = id;

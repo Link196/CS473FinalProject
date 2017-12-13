@@ -14,6 +14,7 @@ private:
 
 public:
 	// constructor
+	Building(); // default constructor
 	Building(int, string, int); // takes in building ID, name, and number of connections
 	// getters and setters
 	int getID();
