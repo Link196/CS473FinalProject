@@ -5,10 +5,12 @@
 
 // Graph adapted from https://quickgrid.wordpress.com/2015/05/30/inputting-directed-undirected-weighted-and-unweighted-graph-in-c-c-adjacency-matrix/
 // Travelling Salesman Algorithm adapted from https://www.thecrazyprogrammer.com/2017/05/travelling-salesman-problem.html
+// Runtime measurement code adapted from http://www.cplusplus.com/reference/ctime/clock/
 
 #include <iostream>
-#include<map>
-#include<algorithm>
+#include <map>
+#include <algorithm>
+#include <time.h>
 #include "Building.h"
 
 using std::cin;
@@ -63,6 +65,8 @@ int mincost(int start, double Graph[14][14]) {
 
 int main()
 {
+	clock_t time; // declare a clock object to measure program runtime
+	time = clock(); // set the clock variable to the system clock
 	for (int i = 0; i < 14; i++)
 		visit[i] = false;
 
@@ -347,6 +351,9 @@ int main()
 		cout << Buildings[path[i]].getName() << " -> ";
 	cout << "Facilities" << endl;
 	cout << "Time taken: " << cost << " minutes" << endl;
+	cout << endl;
+	time = clock() - time;
+	printf("The program took %d clicks (%f seconds) to run.\n", time, ((float)time) / CLOCKS_PER_SEC);
 	cout << endl;
 	system("PAUSE");
 }
