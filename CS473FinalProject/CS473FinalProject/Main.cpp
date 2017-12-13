@@ -342,9 +342,11 @@ int main()
 						  //	printf("%d\n", ans);
 						  //}
 	mincost(0,Graph);
-	cout << cost << endl;
-	for (int i = 0; i < 15; i++)
-		cout << path[i] << " ";
+	cout << "Path taken: ";
+	for (int i = 0; i < 14; i++)
+		cout << Buildings[path[i]].getName() << " -> ";
+	cout << "Facilities" << endl;
+	cout << "Time taken: " << cost << " minutes" << endl;
 	cout << endl;
 	system("PAUSE");
 }
