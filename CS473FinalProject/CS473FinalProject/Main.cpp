@@ -65,6 +65,7 @@ int main()
 {
 	for (int i = 0; i < 14; i++)
 		visit[i] = false;
+
 	// Building object creation
 	Building Facilities(0, "Facilities", 13);
 	Building Johnston(1, "Johnston", 13);
@@ -103,9 +104,9 @@ int main()
 
 	for (int i = 0; i < 14; i++)
 		Graph[i][i] = 0;
+
 	// add edges to the graph...manually
 	// To/From Johnston
-	
 	Graph[1][2] = 0.621; // Johnston to Robinson
 	Graph[2][1] = 0.621; // Robinson to Johnston
 	Graph[1][3] = 1.088; // Johnston to the Library
@@ -131,8 +132,7 @@ int main()
 	Graph[1][13] = 3.735; // Johnston to Hawthorne
 	Graph[13][1] = 3.735; // Hawthorne to Johnston
 
-						  // To/From Robinson
-
+	// To/From Robinson
 	Graph[2][3] = 1.216; // Robinson to the Library
 	Graph[3][2] = 1.216; // The Library to Robinson
 	Graph[2][4] = 1.226; // Robinson to Hendricks
@@ -156,7 +156,7 @@ int main()
 	Graph[2][13] = 4.200; // Robinson to Hawthorne
 	Graph[13][2] = 4.200; // Hawthorne to Robinson
 
-						  // To/From the Library
+	// To/From the Library
 	Graph[3][4] = 1.644; // The Library to Hendricks
 	Graph[4][3] = 1.644; // Hendricks to the Library
 	Graph[3][5] = 1.052; // The Library to the HUB
@@ -178,7 +178,7 @@ int main()
 	Graph[3][13] = 3.683; // The Library to Hawthorne
 	Graph[13][3] = 3.683; // Hawthorne to the Library
 
-						  // To/From Hendricks
+	// To/From Hendricks
 	Graph[4][5] = 1.130; // Hendricks to the HUB
 	Graph[5][4] = 1.130; // The HUB to Hendricks
 	Graph[4][6] = 1.748; // Hendricks to Lindaman
@@ -198,7 +198,7 @@ int main()
 	Graph[4][13] = 2.943; // Hendricks to Hawthorne
 	Graph[13][4] = 2.943; // Hawthorne to Hendricks
 
-						  // To/From the HUB
+	// To/From the HUB
 	Graph[5][6] = 1.953; // The HUB to Lindaman
 	Graph[6][5] = 1.953; // Lindaman to the HUB
 	Graph[5][7] = 2.481; // The HUB to Weyerhaeuser
@@ -216,7 +216,7 @@ int main()
 	Graph[5][13] = 2.597; // The HUB to Hawthorne
 	Graph[13][5] = 2.597; // Hawthorne to the HUB
 
-						  // To/From Lindaman
+	// To/From Lindaman
 	Graph[6][7] = 0.553; // Lindaman to Weyerhaeuser
 	Graph[7][6] = 0.553; // Weyerhaeuser to Lindaman
 	Graph[6][8] = 1.548; // Lindaman to Dixon
@@ -232,7 +232,7 @@ int main()
 	Graph[6][13] = 4.657; // Lindaman to Hawthorne
 	Graph[13][6] = 4.657; // Hawthorne to Lindaman
 
-						  // To/From Weyerhaeuser
+	// To/From Weyerhaeuser
 	Graph[7][8] = 1.714; // Weyerhaeuser to Dixon
 	Graph[8][7] = 1.714; // Dixon to Weyerhaeuser
 	Graph[7][9] = 2.408; // Weyerhaeuser to Cowles Auditorium
@@ -246,7 +246,7 @@ int main()
 	Graph[7][13] = 4.935; // Weyerhaeuser to Hawthorne
 	Graph[13][7] = 4.935; // Hawthorne to Weyerhaeuser
 
-						  // To/From Dixon
+	// To/From Dixon
 	Graph[8][9] = 0.709; // Dixon to Cowles Auditorium
 	Graph[9][8] = 0.709; // Cowles Auditorium to Dixon
 	Graph[8][10] = 0.984; // Dixon to the Music Building
@@ -258,7 +258,7 @@ int main()
 	Graph[8][13] = 4.127; // Dixon to Hawthorne
 	Graph[13][8] = 4.127; // Hawthorne to Dixon
 
-						  // To/From Cowles Auditorium
+	// To/From Cowles Auditorium
 	Graph[9][10] = 0.701; // Cowles Auditorium to the Music Building
 	Graph[10][9] = 0.701; // The Music Building to Cowles Auditorium
 	Graph[9][11] = 3.455; // Cowles Auditorium to Westminster
@@ -268,7 +268,7 @@ int main()
 	Graph[9][13] = 3.831; // Cowles Auditorium to Hawthorne
 	Graph[13][9] = 3.831; // Hawthorne to Cowles Auditorium
 
-						  // To/From the Music Building
+	// To/From the Music Building
 	Graph[10][11] = 4.296; // The Music Building to Westminster
 	Graph[11][10] = 4.296; // Westminster to the Music Building
 	Graph[10][12] = 3.712; // The Music Building to the Art Building
@@ -276,17 +276,17 @@ int main()
 	Graph[10][13] = 4.462; // The Music Building to Hawthorne
 	Graph[13][10] = 4.462; // Hawthorne to the Music Building
 
-						   // To/From Westminster
+	// To/From Westminster
 	Graph[11][12] = 0.771; // Westminster to the Art Building
 	Graph[12][11] = 0.771; // The Art Building to Westminster
 	Graph[11][13] = 5.745; // Westminster to Hawthorne
 	Graph[13][11] = 5.745; // Hawthorne to Westminster
 
-						   // To/From the Art Building
+	// To/From the Art Building
 	Graph[12][13] = 5.351; // The Art Building to Hawthorne
 	Graph[13][12] = 5.351; // Hawthorne to the Art Building
 
-						   // To/From Facilities
+	// To/From Facilities
 	Graph[0][1] = 1.496; // Facilities to Johnston
 	Graph[1][0] = 1.496; // Johnston to Facilities
 	Graph[0][2] = 1.200; // Facilities to Robinson
@@ -313,8 +313,8 @@ int main()
 	Graph[12][0] = 0.901; // The Art Building to Facilities
 	Graph[0][13] = 4.634; // Facilities to Hawthorne
 	Graph[13][0] = 4.634; // Hawthorne to Facilities
-	Graph[0][0] = 0;
-						  // One of the billion at
+
+						  // One of the billion attempts
 						  //double  dp[15][15];
 						  //double  ans;
 						  //int i, j, p, k;
