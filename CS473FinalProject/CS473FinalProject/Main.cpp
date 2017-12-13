@@ -129,7 +129,8 @@ void TravelingJanitorREC(double graph[14][14], double currb, double currw, int l
 			currb = temp;
 
 			// reset the visited array
-			memset(visited, false, 14);
+			for (int t = 0; t < 14; t++)
+				visited[t] = false;
 			for (int j = 0; j < l - 1; j++)
 				visited[path[j]] = true;
 		}
@@ -140,12 +141,12 @@ void TravelingJanitorREC(double graph[14][14], double currb, double currw, int l
 void TravelingJanitor(double graph[14][14], int(&f_path)[15], bool(&visited)[14], double &finw)
 {
 	int path[15];
+	for (int t = 0; t < 15; t++)
+		path[t] = -1;
 
 	// calculate initial lower bound for the starting node using 1/2 * (sum of first min and second min for all edges)
-	double currb = 0;
-	memset(path, -1, 15);
-
 	// calculate the initial bound
+	double currb = 0;
 	for (int i = 0; i < 14; i++)
 		currb += (firstMin(graph, i) + secondMin(graph, i));
 
@@ -206,8 +207,13 @@ int main()
 		for (int j = 0; j < edges; j++)
 			Graph[i][j] = 0;
 
-	memset(visited, false, 14); // initialize visited
-	memset(f_path, -1, 15); // initialize f_path
+	// initialize visited
+	for (int t = 0; t < 14; t++)
+		visited[t] = false;
+	
+	// initialize f_path
+	for (int t = 0; t < 15; t++)
+		f_path[t] = -1;
 
 	// add edges to the graph...manually
 	// To/From Johnston
