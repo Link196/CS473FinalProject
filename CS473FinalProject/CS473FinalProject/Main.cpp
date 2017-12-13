@@ -1,7 +1,6 @@
 ///////////////////////////////////////////////////////////////////////
 // Group Members: Andrew Hutson, McKenna Galle, Vina Le
 // Assignment and Course: CS 473 Final Project
-// Date Modified: 11/29/2017
 ///////////////////////////////////////////////////////////////////////
 
 // Graph adapted from https://quickgrid.wordpress.com/2015/05/30/inputting-directed-undirected-weighted-and-unweighted-graph-in-c-c-adjacency-matrix/
